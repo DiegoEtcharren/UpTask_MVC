@@ -2,9 +2,30 @@
 
 require_once __DIR__ . '/../includes/app.php';
 
+use Controllers\LoginController;
 use MVC\Router;
 $router = new Router();
 
+// Login: 
+$router->get('/', [LoginController::class,'login']);
+$router->post('/', [LoginController::class,'login']);
+$router->get('/logout', [LoginController::class,'logout']);
+
+// Crear cuentas: 
+$router->get('/crear', [LoginController::class,'crear']);
+$router->post('/crear', [LoginController::class,'crear']);
+
+// Olivde mi password: 
+$router->get('/olvide', [LoginController::class,'olvide']);
+$router->post('/olvide', [LoginController::class,'olvide']);
+
+// Colocar el nuevo password: 
+$router->get('/restablecer', [LoginController::class,'restablecer']);
+$router->post('/restablecer', [LoginController::class,'restablecer']);
+
+//Confirmacion de cuenta: 
+$router->get('/mensaje', [LoginController::class,'mensaje']);
+$router->get('/confirmar', [LoginController::class,'confirmar']);
 
 
 
