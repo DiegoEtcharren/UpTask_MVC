@@ -36,6 +36,7 @@ class Email {
         solo debes confrimarla en el siguiente enlace</p>';
         $contenido .= "<p>Presiona Aqui: <a href='http://localhost:3000/confirmar?
         token=" . $this->token ."'>Confirmar Cuenta</a></p>";
+        $contenido .= 'Si tu no creaste esta cuenta, ignora este correo';
         $contenido .= '<html>';
 
         $mail->Body = $contenido;
