@@ -31,8 +31,23 @@ class Usuario extends ActiveRecord {
         $this->confirmado = $args['confirmado'] ?? 0;
     }
 
-    // Validacion Cuentas nuevas: 
+    // Validar Login: 
+    public function validarLogin() {
+        if (!$this->email) {
+            self::$alertas['error'][] = 'El email es necesario';
+        } else if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+            self::$alertas['error'][] = 'El email es no valido';
+        }
+        if (!$this->password) {
+            self::$alertas['error'][] = 'El password es necesario';
+        }
 
+        
+
+        return self::$alertas;
+    }
+
+    // Validacion Cuentas nuevas: 
     public function validarNuevaCuenta(){
         if (!$this->nombre) {
             self::$alertas['error'][] = 'El nombre del usuario es necesario';
@@ -51,6 +66,28 @@ class Usuario extends ActiveRecord {
         return self::$alertas;
     }
 
+    // Valida un email:
+    public function validarEmail() {
+        if (!$this->email) {
+            self::$alertas['error'][] = 'El email es necesario';
+        }
+
+        if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+            self::$alertas['error'][] = 'El email es no valido';
+        }
+        return self::$alertas;
+    } 
+
+    // Valida password: 
+    public function validarPassword() {
+        if (!$this->password) {
+            self::$alertas['error'][] = 'El password es necesario';
+        } else if (strlen($this->password) < 6) {
+            self::$alertas['error'][] = 'El password debe ser mayor de 6 o mas  caracteres';
+        }
+        return self::$alertas;
+    }
+
     // Hashea el password: 
     public function hashPassword() {
         $this->password = password_hash($this->password, PASSWORD_BCRYPT);
@@ -59,5 +96,6 @@ class Usuario extends ActiveRecord {
     public function crearToken() {
         $this->token = uniqid();
     }
+
 }
 

@@ -1,6 +1,7 @@
 <div class='contenedor login'>
     <?php include_once __DIR__ . '/../templates/nombre-sitio.php'; ?>
     <div class='contenedor-sm'>
+    <?php include_once __DIR__ . '/../templates/alertas.php'; ?>
         <p class='descripcion-pagina'>Iniciar Sesion</p>
         <form class='formulario' method='POST' action='/'>
             <div class='campo'>
