@@ -29,7 +29,7 @@ class LoginController {
                         $_SESSION['email'] = $usuario->email;
                         $_SESSION['login'] = true;
 
-                        header('Location: /proyectos');
+                        header('Location: /dashboard');
                         exit;
     
                     } else {
@@ -49,8 +49,11 @@ class LoginController {
         ]);
     }
 
-    public static function logut() {
-
+    public static function logout() {
+        isSession();
+        $_SESSION = [];
+        header('Location: /');
+        exit;
     }
 
     public static function crear(Router $router) {
