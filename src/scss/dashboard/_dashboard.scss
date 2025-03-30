@@ -7,11 +7,11 @@
     @include m.tablet {
         display: flex;
         height: 100vh;
-
     }
 
     .principal {
         flex: 1;
+        overflow-y: scroll;
     }
 
     .contenido {
