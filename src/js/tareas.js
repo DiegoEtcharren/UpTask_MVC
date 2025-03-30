@@ -80,7 +80,7 @@
     }
 
     // Consultar servidor para agregar una nueva tarea:
-    function agregarTarea() {
+    function agregarTarea(tarea) {
         
     };
 })();
