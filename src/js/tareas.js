@@ -1,7 +1,76 @@
 (function() {
+    // Obtener tareas y desplegar: 
+    obtenerTareas();
+
     // Boton para agregar tarea: 
     const nuevaTareaBoton = document.querySelector('#agregar-tarea');
     nuevaTareaBoton.addEventListener('click', mostrarFormulario);
+
+    async function obtenerTareas() {
+        try {
+            const urlProyecto = obtenerProyecto();
+            const url = `http://localhost:3000/api/tareas?url=${urlProyecto}`;
+            const respuesta = await fetch(url);
+            const resultado = await respuesta.json();
+            const { tareas } = resultado;
+            mostrarTareas(tareas);
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    };
+
+    function mostrarTareas(tareas) {
+        if (tareas.length === 0) {
+            const contenedorTareas = document.querySelector('#listado-tareas');
+            const textoNoTareas = document.createElement('LI');
+            textoNoTareas.textContent = 'No hay Tareas';
+            textoNoTareas.classList.add('no-tareas');
+            contenedorTareas.appendChild(textoNoTareas);
+            return;
+        }
+
+        const estados = {
+            0 : 'Pendiente',
+            1 : 'Completa'
+        }
+
+        tareas.forEach(tarea => {
+            const contenedorTarea = document.createElement('LI');
+            contenedorTarea.dataset.tareaId = tarea.id;
+            contenedorTarea.classList.add('tarea');
+
+            const nombreTarea = document.createElement('P');
+            nombreTarea.textContent = tarea.nombre;
+
+            const opcionesDiv = document.createElement('DIV');
+            opcionesDiv.classList.add('opciones');
+
+            // Botones: 
+            const btnEstadoTarea = document.createElement('BUTTON');
+            btnEstadoTarea.classList.add('estado-tarea');
+            btnEstadoTarea.classList.add(`${estados[tarea.estado].toLowerCase()}`);
+            btnEstadoTarea.textContent = estados[tarea.estado];
+            btnEstadoTarea.dataset.estadoTarea = tarea.estado
+
+            const btnEliminarTarea = document.createElement('BUTTON');
+            btnEliminarTarea.classList.add('eliminar-tarea');
+            btnEliminarTarea.dataset.idTarea = tarea.id;
+            btnEliminarTarea.textContent = 'Eliminar';
+
+            opcionesDiv.appendChild(btnEstadoTarea);
+            opcionesDiv.appendChild(btnEliminarTarea);
+
+            contenedorTarea.appendChild(nombreTarea);
+            contenedorTarea.appendChild(opcionesDiv);
+
+            const listadoTareas = document.querySelector('#listado-tareas');
+            listadoTareas.appendChild(contenedorTarea);
+
+            console.log(btnEstadoTarea);    
+        });
+    }
 
     function mostrarFormulario() {
         const modal = document.createElement('DIV');
@@ -80,9 +149,40 @@
     }
 
     // Consultar servidor para agregar una nueva tarea:
-    function agregarTarea(tarea) {
-        
+    async function agregarTarea(tarea) {
+        // Construir la peticion: 
+        const datos = new FormData();
+        datos.append('nombre', tarea);
+        datos.append('proyectoId', obtenerProyecto());
+
+        try {
+            const url = 'http://localhost:3000/api/tarea';
+            const respuesta = await fetch(url, {
+                method : 'POST',
+                body: datos,
+            });
+
+            const resultado = await respuesta.json();
+            mostrarAlerta(resultado.mensaje, resultado.tipo, document.querySelector('.formulario legend'));
+
+            if (resultado.tipo === 'exito') {
+                const modal = document.querySelector('.modal');
+                setTimeout(() => {
+                    modal.remove();
+                }, 2000);
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+
     };
+
+    function obtenerProyecto() {
+        const proyectoParams = new URLSearchParams(window.location.search);
+        const proyecto = Object.fromEntries(proyectoParams.entries());
+        return proyecto.url;
+    }
 })();
 
 
