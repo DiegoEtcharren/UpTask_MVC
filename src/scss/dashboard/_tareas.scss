@@ -21,6 +21,12 @@
     .no-tareas {
         text-align: center;
     }
+
+    p {
+        &:hover {
+            cursor: pointer;
+        }
+    }
 }
 
 .tarea {

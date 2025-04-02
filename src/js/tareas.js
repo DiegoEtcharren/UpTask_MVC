@@ -5,7 +5,9 @@
 
     // Boton para agregar tarea: 
     const nuevaTareaBoton = document.querySelector('#agregar-tarea');
-    nuevaTareaBoton.addEventListener('click', mostrarFormulario);
+    nuevaTareaBoton.addEventListener('click', function() {
+        mostrarFormulario();
+    });
 
     async function obtenerTareas() {
         try {
@@ -46,6 +48,9 @@
 
             const nombreTarea = document.createElement('P');
             nombreTarea.textContent = tarea.nombre;
+            nombreTarea.ondblclick = function () {
+                mostrarFormulario(true, tarea);
+            }
 
             const opcionesDiv = document.createElement('DIV');
             opcionesDiv.classList.add('opciones');
@@ -79,25 +84,26 @@
         });
     }
 
-    function mostrarFormulario() {
+    function mostrarFormulario(editar = false, tarea = {}) {
         const modal = document.createElement('DIV');
         modal.classList.add('modal');
         modal.innerHTML = `
             <form class='formulario nueva-tarea'>
-                <legend> Añade una nueva Tarea </legend>
+                <legend> ${editar ? 'Editar Tarea' : 'Añade una nueva Tarea'} </legend>
                 <div class='campo'>
                     <label for='tarea'>Tarea</label>
                     <input
                         type='text'
                         name='tarea'
                         id='tarea'
-                        placeholder='Añadir Tarea'/>
+                        value = '${tarea.nombre ? tarea.nombre : ''}'
+                        placeholder='${tarea.nombre ? 'Editar Nombre de la Tarea' : 'Anadir nombre de tarea'}'/>
                 </div>
                 <div class='opciones'>
                     <input
                         type='submit'
                         class='submit-nueva-tarea'
-                        value='Añade Tarea'/>
+                        value=' ${editar ? 'Editar Tarea' : 'Añade Tarea'}'/>
                     <button type='button' class='cerrar-modal'>Cancelar</button>
                 </div>
             </form>
