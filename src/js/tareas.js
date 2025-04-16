@@ -279,8 +279,6 @@
             
             const resultado = await respuesta.json();
 
-            console.log(resultado);
-
             if (resultado.respuesta.tipo === 'exito') {
                 Swal.fire(
                     resultado.respuesta.mensaje,
@@ -353,7 +351,6 @@
                 mostrarTareas();
             };
 
-            console.log(resultado);
         } catch (error) {
 
         }
